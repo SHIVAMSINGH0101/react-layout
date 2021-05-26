@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "layout-maker",
+	"webDir": "build",
+	"bundledWebRuntime": false
+}
