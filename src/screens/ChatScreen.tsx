@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { MessageArea } from "../comps/containers/MessageArea";
 import { Header } from "../comps/groups/Header";
 import { TextArea } from "../comps/inputs/Textarea";
 import { isPlatform } from "@ionic/react";
+import { TextSVG } from "../comps/containers/TextSVG";
 
 export const ChatScreen: React.FC = (props) => {
   const [statusBarHeight, setStatusBarHeight] = useState<string>("0px");
@@ -25,6 +26,20 @@ export const ChatScreen: React.FC = (props) => {
       `calc(100% - ${topHeight} - ${bottomHeight} - ${statusBarHeight} - ${bottomMargin})`
     );
   }, [statusBarHeight]);
+
+  /**drawing text svg */
+  /**determine proper size */
+  const messageAreaRef = useRef<HTMLDivElement>(null);
+  const [SVGWidth, setSVGWidth] = useState<number>(0);
+  useEffect(() => {
+    setSVGWidth(
+      parseFloat(
+        window
+          .getComputedStyle(messageAreaRef.current as Element)
+          .getPropertyValue("width")
+      )
+    );
+  }, [messageAreaRef.current]);
   return (
     <div
       style={{
@@ -35,12 +50,29 @@ export const ChatScreen: React.FC = (props) => {
     >
       <div style={{ height: statusBarHeight, padding: 0, margin: 0 }}></div>
       <Header fontSize="1em" height={topHeight} title="Algorithms Class" />
-      <MessageArea height={middleHeight} fontSize={"1.5em"} />
-      <TextArea
-        height={bottomHeight}
-        lineHeight={bottomHeight}
-        fontSize={"1.5rem"}
-      />
+      <div
+        style={{ height: middleHeight }}
+        className="container-md"
+        ref={messageAreaRef}
+      >
+        {messageAreaRef.current ? (
+          <MessageArea height={"100%"} fontSize={"1.5em"}>
+            <TextSVG
+              fontSize="1rem"
+              lineHeight="1.4em"
+              text="this is an example text. you can underline this text, strikethrough"
+              svgWidth={SVGWidth}
+            />
+          </MessageArea>
+        ) : null}
+      </div>
+      <div className="container-md">
+        <TextArea
+          height={bottomHeight}
+          lineHeight={bottomHeight}
+          fontSize={"1rem"}
+        />
+      </div>
       <div style={{ height: bottomMargin, padding: 0, margin: 0 }}></div>
     </div>
   );

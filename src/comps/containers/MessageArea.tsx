@@ -8,7 +8,7 @@ interface MessageAreaProps {
 export const MessageArea: React.FC<MessageAreaProps> = (props) => {
   return (
     <div style={{ height: props.height, fontSize: props.fontSize }}>
-      <div></div>
+      {props.children}
     </div>
   );
 };
